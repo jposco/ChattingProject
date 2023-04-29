@@ -37,3 +37,10 @@ base : main / compare : "개발한 브랜치"
 12. 다시 브랜치 생성
 git checkout -b "새로운 브랜치 명"
 
+브랜치확인
+local : git branch
+remote : git branch -r
+
+브랜치 삭제하기
+git branch -D test3
+
