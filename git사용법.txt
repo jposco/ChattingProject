@@ -10,7 +10,7 @@
 // git checkout -b test2 (브랜치 생성후 checkout된다)
 // 
 //compare & pull request 누르기
-//제목작성후 작성
+//제목작성후 작성 
 
 
 1. 한 사람이 repo 만들기
