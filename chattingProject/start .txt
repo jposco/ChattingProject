@@ -1,0 +1,65 @@
+< login >
+1,로그인하기
+	-id/pw 입력
+2. ID 찾기
+	-name, phone, birth
+3. PW 찾기
+	-`ID, name, phone, birth
+4. 회원가입
+	-`ID(노중복), PW, name, phone, birth 
+
+< main >
+정제철님이 로그인했습니다.
+1. 친구
+	1. 내 프로필
+		1. 프로필 보기
+			-상메
+			-노래
+			-생일 
+			-번호
+		2. 상태메시지 등록/수정
+		3. 노래 설정
+
+	2. 온라인 친구 목록
+		1. 홍길동
+			-이름(별명)
+			-상메
+			-노래
+			-생일
+			-번호
+		2. 길장미(동문)
+		3. 주우재(동문)
+채팅 검색기능!
+
+	3. 친구 등록
+		-이름, 별명, 번호
+
+2. 채팅
+	채팅내역 출력, 채팅 전송/수신
+
+3. 설정
+	1. 비밀번호 변경
+	2. 회원탈퇴
+
+DROP TABLE IF EXISTS user;
+CREATE TABLE user (
+id VARCHAR(50) NOT NULL PRIMARY KEY,
+pw VARCHAR(50) NOT NULL,
+name VARCHAR(10) NOT NULL,
+phone INT NOT NULL,
+status VARCHAR(50),
+birth DATE NOT NULL,
+song VARCHAR(50)
+);
+
+DROP TABLE IF EXISTS chatting;
+CREATE TABLE chatting (
+sequence INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+chatname VARCHAR(10) NOT NULL,
+time TIMESTAMP NOT NULL,
+send VARCHAR(1024),
+recv VARCHAR(1024),
+chat_id VARCHAR(50) NOT NULL,
+foreign key(chat_id) references user(id)
+ON UPDATE CASCADE ON DELETE CASCADE
+);
