@@ -1,0 +1,97 @@
+
+
+CREATE DATABASE posco
+DEFAULT CHARACTER SET utf8
+DEFAULT COLLATE utf8_general_ci;
+use posco;
+
+CREATE TABLE customers (
+id VARCHAR(50) NOT NULL PRIMARY KEY,
+name VARCHAR(50) NOT NULL,
+email VARCHAR(255) NOT NULL,
+address VARCHAR(255) NOT NULL );
+
+CREATE TABLE orders (
+id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+customer_id VARCHAR(50),
+date date not null, 
+foreign key(customer_id) references customers(id) 
+ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE order_detail (
+order_id INT,
+item varchar(50) NOT NULL,
+quantity int not null, 
+foreign key(order_id) references orders(id)
+ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+INSERT INTO customers
+VALUES
+('alice789','Alice Johnson','alice.johnson@hanmail.com','789 Elm St, Nowhere'),
+('jane456','Jan Doe','jane.doe@yahoo.com','456 Oak Ave, Somwhere'),
+('john123','John Smith','john.smith@gmail.com','123 Main St, Anytown, USA');
+
+
+INSERT INTO orders
+VALUES
+('1','john123','2022-01-01'),
+('2','john123','2022-02-01'),
+('3','jane456','2022-03-01');
+
+INSERT INTO order_detail
+VALUES
+(1,'pen',10),
+(1,'toy',2),
+(2,'clothes',5),
+(3,'socks',100);
+
+ALTER TABLE orders ADD total INT;
+
+UPDATE orders SET total = '10000' where id=1;
+UPDATE orders SET total = '15000' where id=2;
+UPDATE orders SET total = '20000' where id=3; 
+
+UPDATE customers
+SET id='John Park'
+WHERE id='john123';
+
+SELECT  distinct c.name
+FROM customers c
+JOIN orders o ON c.id = o.customer_id
+WHERE o.date
+BETWEEN '2022-01-01' and '2022-02-01';
+	=SELECT name from customers where id =
+	(SELECT DISTINCT customer_id from orders 
+	where date >= '2022-01-01' AND date <= '2022-02-01');
+
+SELECT * from orders
+where total
+order by total desc
+limit 1;
+
+SELECT *
+FROM orders
+WHERE total = (SELECT MAX(total) FROM orders);
+	(=SELECT max(total) AS max_total FROM orders;)
+
+SELECT o.customer_id, SUM(d.quantity)
+FROM orders o
+JOIN order_detail d ON d.order_id = o.id
+where d.quantity
+group by o.customer_id;
+
+SELECT c.id, sum(total) AS total_price
+FROM customers c
+JOIN orders o ON c.id = o.customer_id
+WHERE o.date 
+GROUP BY c.id HAVING SUM(o.total) >= 21000;
+
+SELECT *
+FROM orders o
+JOIN customers c ON o.customer_id = c.id;
+
+SELECT *
+FROM customers c
+LEFT JOIN orders o ON c.id = o.customer_id;
