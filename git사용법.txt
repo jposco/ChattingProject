@@ -4,7 +4,7 @@
 // pull request > new pull request
 //base : main / compare"개발한 브랜치"
 //merge pull request
-//git chectout main -> git pull
+//git chectout ma in -> git pull
 // // 원래 브랜치 버리고, 새브랜치를 또 파서 코딩한다
 //---------최신상태의 main상태-----------------------
 // git checkout -b test2 (브랜치 생성후 checkout된다)
