@@ -30,30 +30,281 @@ sql::Statement* stmt;
 SOCKET client_sock;
 string my_nick;
 
-void mainMenu()
+void startMenu()
 {
     cout << "\n";
-    cout << "\t"; cout << "********************************** \n";
-    cout << "\t"; cout << "*                                * \n";
-    cout << "\t"; cout << "*  *******    *     *     *  *   * \n";
-    cout << "\t"; cout << "*     *      * *    *     * *    * \n";
-    cout << "\t"; cout << "*     *     *****   *     **     * \n";
-    cout << "\t"; cout << "*     *    *     *  *     * *    * \n";
-    cout << "\t"; cout << "*     *   *       * ***** *  *   * \n";
-    cout << "\t"; cout << "*                                * \n";
-    cout << "\t"; cout << "*                                * \n";
-    cout << "\t"; cout << "*                                * \n";
-    cout << "\t"; cout << "*       1.로그인                 * \n";
-    cout << "\t"; cout << "*                                * \n";
-    cout << "\t"; cout << "*       2. ID 찾기               * \n";
-    cout << "\t"; cout << "*                                * \n";
-    cout << "\t"; cout << "*       3. PW 찾기               * \n";
-    cout << "\t"; cout << "*                                * \n";
-    cout << "\t"; cout << "*       4. 회원가입              * \n";
-    cout << "\t"; cout << "*                                * \n";
-    cout << "\t"; cout << "*       0. 종료                  * \n";
-    cout << "\t"; cout << "*                                * \n";
-    cout << "\t"; cout << "********************************** \n\n";
+    cout << " "; cout << "********************************* \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*  *******    *     *     *  *  * \n";
+    cout << " "; cout << "*     *      * *    *     * *   * \n";
+    cout << " "; cout << "*     *     *****   *     **    * \n";
+    cout << " "; cout << "*     *    *     *  *     * *   * \n";
+    cout << " "; cout << "*     *   *       * ***** *  *  * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      1.로그인                 * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      2. ID 찾기               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      3. PW 찾기               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      4. 회원가입              * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      0. 종료                  * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "********************************* \n\n";
+}
+void login()
+{
+    system("cls");
+    cout << "\n";
+    cout << " "; cout << "********************************* \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*  *******    *     *     *  *  * \n";
+    cout << " "; cout << "*     *      * *    *     * *   * \n";
+    cout << " "; cout << "*     *     *****   *     **    * \n";
+    cout << " "; cout << "*     *    *     *  *     * *   * \n";
+    cout << " "; cout << "*     *   *       * ***** *  *  * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      < 로그인 하기 >          * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      >> 아이디 입력           * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      >> 비밀번호 입력         * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      0. 뒤로가기              * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "********************************* \n\n";
+}
+void searchId()
+{
+    system("cls");
+    cout << "\n";
+    cout << " "; cout << "********************************* \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*  *******    *     *     *  *  * \n";
+    cout << " "; cout << "*     *      * *    *     * *   * \n";
+    cout << " "; cout << "*     *     *****   *     **    * \n";
+    cout << " "; cout << "*     *    *     *  *     * *   * \n";
+    cout << " "; cout << "*     *   *       * ***** *  *  * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      < 아이디 찾기 >          * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      >> 이름 입력             * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      >> 번호 입력             * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      >> 생년월일(8자리) 입력  * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      0. 뒤로가기              * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "********************************* \n\n";
+}
+void searchPw()
+{
+    system("cls");
+    cout << "\n";
+    cout << " "; cout << "********************************* \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*  *******    *     *     *  *  * \n";
+    cout << " "; cout << "*     *      * *    *     * *   * \n";
+    cout << " "; cout << "*     *     *****   *     **    * \n";
+    cout << " "; cout << "*     *    *     *  *     * *   * \n";
+    cout << " "; cout << "*     *   *       * ***** *  *  * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      < 비밀번호 찾기 >        * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      >> 아이디 입력           * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      >> 이름 입력             * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      >> 전화번호 입력         * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      >> 생년월일(8자리) 입력  * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      0. 뒤로가기              * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "********************************* \n\n";
+}
+void createUser()
+{
+    system("cls");
+    cout << "\n";
+    cout << " "; cout << "********************************* \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*  *******    *     *     *  *  * \n";
+    cout << " "; cout << "*     *      * *    *     * *   * \n";
+    cout << " "; cout << "*     *     *****   *     **    * \n";
+    cout << " "; cout << "*     *    *     *  *     * *   * \n";
+    cout << " "; cout << "*     *   *       * ***** *  *  * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      < 회원가입 하기 >        * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      >> 아이디 입력           * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      >> 비밀번호 입력         * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      >> 이름 입력             * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      >> 전화번호 입력         * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      >> 생년월일(8자리) 입력  * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      0. 뒤로가기              * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "********************************* \n\n";
+}
+void mainMenu()
+{
+    system("cls");
+    cout << "\n";
+    cout << " "; cout << "********************************* \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*  *******    *     *     *  *  * \n";
+    cout << " "; cout << "*     *      * *    *     * *   * \n";
+    cout << " "; cout << "*     *     *****   *     **    * \n";
+    cout << " "; cout << "*     *    *     *  *     * *   * \n";
+    cout << " "; cout << "*     *   *       * ***** *  *  * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      1. 내 정보               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      2. 친구                  * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      3. 채팅방                * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      4. 설정                  * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      0. 종료                  * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "********************************* \n\n";
+}
+void myMenu()
+{
+    system("cls");
+    cout << "\n";
+    cout << " "; cout << "********************************* \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*  *******    *     *     *  *  * \n";
+    cout << " "; cout << "*     *      * *    *     * *   * \n";
+    cout << " "; cout << "*     *     *****   *     **    * \n";
+    cout << " "; cout << "*     *    *     *  *     * *   * \n";
+    cout << " "; cout << "*     *   *       * ***** *  *  * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      < 내 정보 >              * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      1. 내 프로필             * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      2. 상메 설정/수정        * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      3. BGM 설정/수정         * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      0. 뒤로가기              * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "********************************* \n\n";
+}
+void friends()
+{
+    system("cls");
+    cout << "\n";
+    cout << " "; cout << "********************************* \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*  *******    *     *     *  *  * \n";
+    cout << " "; cout << "*     *      * *    *     * *   * \n";
+    cout << " "; cout << "*     *     *****   *     **    * \n";
+    cout << " "; cout << "*     *    *     *  *     * *   * \n";
+    cout << " "; cout << "*     *   *       * ***** *  *  * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      < 친구 >                 * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      1. 친구 목룍             * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      2. 친구 생일 검색        * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      0. 뒤로가기              * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "********************************* \n\n";
+}
+void setting()
+{
+    system("cls");
+    cout << "\n";
+    cout << " "; cout << "********************************* \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*  *******    *     *     *  *  * \n";
+    cout << " "; cout << "*     *      * *    *     * *   * \n";
+    cout << " "; cout << "*     *     *****   *     **    * \n";
+    cout << " "; cout << "*     *    *     *  *     * *   * \n";
+    cout << " "; cout << "*     *   *       * ***** *  *  * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      < 설정 >                 * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      1. 비밀번호 변경         * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      2. 회원 탈퇴             * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      0. 뒤로가기              * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "********************************* \n\n";
+}
+int chat_recv() {
+    char buf[MAX_SIZE] = { };
+    string msg;
+
+    while (1) {
+        ZeroMemory(&buf, MAX_SIZE);
+        if (recv(client_sock, buf, MAX_SIZE, 0) > 0) {
+            msg = buf;
+            //닉네임 : 메시지
+            std::stringstream ss(msg);  // 문자열을 스트림화
+            string user;
+            ss >> user; // 스트림을 통해, 문자열을 공백 분리해 변수에 할당
+            //띄어쓰기를 기준으로 닉네임 추출
+            if (user != my_nick) cout << buf << endl; // 내 닉네임과 대조한 후 내가 보낸 게 아닐 경우(상대방)에만 출력하도록.
+        }
+        else {
+            cout << "Server Off" << endl;
+            return -1;
+        }
+    }
 }
 
 class SQL
@@ -542,44 +793,31 @@ public:
     }
 };
 
-int chat_recv() {
-    char buf[MAX_SIZE] = { };
-    string msg;
-
-    while (1) {
-        ZeroMemory(&buf, MAX_SIZE);
-        if (recv(client_sock, buf, MAX_SIZE, 0) > 0) {
-            msg = buf;
-            //닉네임 : 메시지
-            std::stringstream ss(msg);  // 문자열을 스트림화
-            string user;
-            ss >> user; // 스트림을 통해, 문자열을 공백 분리해 변수에 할당
-            //띄어쓰기를 기준으로 닉네임 추출
-            if (user != my_nick) cout << buf << endl; // 내 닉네임과 대조한 후 내가 보낸 게 아닐 경우(상대방)에만 출력하도록.
-        }
-        else {
-            cout << "Server Off" << endl;
-            return -1;
-        }
-    }
-}
-
 int main()
 {
-    mainMenu();
     SQL sql;
-    sql.login();
-    //sql.searchId();
-    sql.searchPw();
+    startMenu(); //시작 화면
+    int a;
+    cin >> a;
+    login();
+    sql.login(); //로그인 하기3
+    //searchId();
+    //sql.searchId(); //아이디 찾기
+    //searchPw();
+    //sql.searchPw(); //비밀번호 찾기
+    //createUser();
     //sql.crateUser();//회원 가입
-    sql.myProfile(); //내 정보
+    //mainMenu(); //메인 화면
+    //myMenu(); //내 정보 화면
+    //sql.myProfile(); //내 정보
     //sql.updateStatus(); //상메 설정
     //sql.updateSong(); //노래 설정
-    //sql.friends(); //내 친구
-    //sql.searchBirth(); //생일 검색
-    //sql.modifyPw(); //비번 변경
+    //friends(); //친구화면
+    //sql.friends(); //친구 목룍
+    //sql.searchBirth(); //친구 생일 검색
+    //setting(); //설정화면
+    //sql.modifyPw(); //비밀번호 변경
     //sql.deleteUser(); //회원 탈퇴
-    //system("cls");
     //system("pause");
 
     WSADATA wsa;
