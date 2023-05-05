@@ -78,7 +78,7 @@ void login()
     cout << " "; cout << "*                               * \n";
     cout << " "; cout << "*      >> 비밀번호 입력         * \n";
     cout << " "; cout << "*                               * \n";
-    cout << " "; cout << "*      0. 뒤로가기              * \n";
+    cout << " "; cout << "*      >> 실패시 메인화면       * \n";
     cout << " "; cout << "*                               * \n";
     cout << " "; cout << "*                               * \n";
     cout << " "; cout << "*                               * \n";
@@ -108,7 +108,7 @@ void searchId()
     cout << " "; cout << "*                               * \n";
     cout << " "; cout << "*      >> 생년월일(8자리) 입력  * \n";
     cout << " "; cout << "*                               * \n";
-    cout << " "; cout << "*      0. 뒤로가기              * \n";
+    cout << " "; cout << "*      >> 완료시 메인화면       * \n";
     cout << " "; cout << "*                               * \n";
     cout << " "; cout << "*                               * \n";
     cout << " "; cout << "********************************* \n\n";
@@ -138,7 +138,7 @@ void searchPw()
     cout << " "; cout << "*                               * \n";
     cout << " "; cout << "*      >> 생년월일(8자리) 입력  * \n";
     cout << " "; cout << "*                               * \n";
-    cout << " "; cout << "*      0. 뒤로가기              * \n";
+    cout << " "; cout << "*      >> 완료시 메인화면       * \n";
     cout << " "; cout << "*                               * \n";
     cout << " "; cout << "********************************* \n\n";
 }
@@ -169,7 +169,7 @@ void createUser()
     cout << " "; cout << "*                               * \n";
     cout << " "; cout << "*      >> 생년월일(8자리) 입력  * \n";
     cout << " "; cout << "*                               * \n";
-    cout << " "; cout << "*      0. 뒤로가기              * \n";
+    cout << " "; cout << "*      >> 완료시 메인화면       * \n";
     cout << " "; cout << "*                               * \n";
     cout << " "; cout << "********************************* \n\n";
 }
@@ -186,13 +186,13 @@ void mainMenu()
     cout << " "; cout << "*     *   *       * ***** *  *  * \n";
     cout << " "; cout << "*                               * \n";
     cout << " "; cout << "*                               * \n";
-    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*    < 현재 상태 : 접속 중 >    * \n";
     cout << " "; cout << "*                               * \n";
     cout << " "; cout << "*      1. 내 정보               * \n";
     cout << " "; cout << "*                               * \n";
     cout << " "; cout << "*      2. 친구                  * \n";
     cout << " "; cout << "*                               * \n";
-    cout << " "; cout << "*      3. 채팅방                * \n";
+    cout << " "; cout << "*      3. 대화방                * \n";
     cout << " "; cout << "*                               * \n";
     cout << " "; cout << "*      4. 설정                  * \n";
     cout << " "; cout << "*                               * \n";
@@ -332,12 +332,12 @@ public:
         if (stmt) { delete stmt; stmt = nullptr; }
     }
 
-    void login()
+    int login()
     {
-        cout << "id";
+        cout << "아이디 : ";
         cin >> id;
         this->id = id;
-        cout << "pw";
+        cout << "비밀번호를 입력해주세요 : ";
         char ch = ' ';
         while (ch != 13) { // Enter 키를 누르면 입력 종료
             ch = _getch();
@@ -369,22 +369,31 @@ public:
             {
                 name = result->getString(3);
                 this->name = name;
-                cout << name << "님 환영합니다." << endl;
+                cout <<"▶"<< name << "님 환영합니다." << endl;
+                return 1;
             }
-            else cout << "해당하는 정보가 없습니다." << endl;
+            else cout << "▶해당하는 정보가 없습니다. 맞지않음" << endl;
         }
-        else cout << "해당하는 정보가 없습니다." << endl;
-
-        cout << "로그인 완료." << endl;
+        else cout << "▶해당하는 정보가 없습니다. 쿼리 결과없음" << endl;
+        pw.clear(); //재로그인을 위해 pw값을 비워둔다.
     }
     void searchId()
     {
-        cout << "name";
+        cout << "이름 : ";
         cin >> name;
-        cout << "phone";
+        cout << "전화번호 : ";
         cin >> phone;
-        cout << "birth";
-        cin >> birth;
+        while (true)
+        {
+            cout << "생년월일 : ";
+            cin >> birth;
+            if (birth.length() != 8) {
+                cout << "▶생년월일은 8자리로 입력해주세요." << endl;
+                continue;
+            }
+            break;
+        }
+
 
         string year = birth.substr(0, 4);
         string month = birth.substr(4, 2);
@@ -404,22 +413,30 @@ public:
 
             if (db_name == name && db_phone == phone && db_birth == DATE)
             {
-                cout << name << "님의 아이디는 " << db_id << "입니다." << endl;
+                cout <<"▶"<< name << "님의 아이디는 " << db_id << "입니다." << endl;
             }
-            else  cout << "해당하는 정보가 없습니다." << endl;
+            else  cout << "▶해당하는 정보가 없습니다." << endl;
         }
-        else cout << "해당하는 정보가 없습니다." << endl;
+        else cout << "▶해당하는 정보가 없습니다." << endl;
     }
     void searchPw()
     {
-        cout << "id";
+        cout << "아이디 : ";
         cin >> id;
-        cout << "name";
+        cout << "이름 : ";
         cin >> name;
-        cout << "phone";
+        cout << "전화번호 : ";
         cin >> phone;
-        cout << "birth";
-        cin >> birth;
+        while (true)
+        {
+            cout << "생년월일 : ";
+            cin >> birth;
+            if (birth.length() != 8) {
+                cout << "▶생년월일은 8자리로 입력해주세요." << endl;
+                continue;
+            }
+            break;
+        }
 
         string year = birth.substr(0, 4);
         string month = birth.substr(4, 2);
@@ -440,14 +457,14 @@ public:
             if (db_id == id && db_name == name && db_phone == phone && db_birth == DATE)
             {
                 string new_pw = "";
-                cout << "new_pw";
+                cout << "새로운 비밀번호를 입력해주세요 : ";
                 char ch = ' ';
                 while (ch != 13) { // Enter 키를 누르면 입력 종료
                     ch = _getch();
                     if (ch == 13) break; // Enter 키를 누르면 입력 종료
                     if (ch == 8) { // Backspace 키인 경우
-                        if (!pw.empty()) { // 입력된 문자가 있으면
-                            pw.pop_back(); // 마지막 문자를 삭제
+                        if (!new_pw.empty()) { // 입력된 문자가 있으면
+                            new_pw.pop_back(); // 마지막 문자를 삭제
                             cout << "\b \b"; // 커서 위치를 왼쪽으로 이동시켜 공백을 출력한 뒤, 다시 커서 위치를 원래대로 이동시킴
                         }
                     }
@@ -457,44 +474,48 @@ public:
                     }
                 }
                 cout << endl;
-                string renew_pw = "";
-                cout << "renew_pw";
-                char rech = ' ';
-                while (rech != 13) { // Enter 키를 누르면 입력 종료
-                    rech = _getch();
-                    if (rech == 13) break; // Enter 키를 누르면 입력 종료
-                    if (ch == 8) { // Backspace 키인 경우
-                        if (!pw.empty()) { // 입력된 문자가 있으면
-                            pw.pop_back(); // 마지막 문자를 삭제
-                            cout << "\b \b"; // 커서 위치를 왼쪽으로 이동시켜 공백을 출력한 뒤, 다시 커서 위치를 원래대로 이동시킴
+                while (1) {
+                    string renew_pw = "";
+                    cout << endl << "다시 한번 입력해주세요. : ";
+                    char rech = ' ';                
+                    while (rech != 13) { // Enter 키를 누르면 입력 종료
+                        rech = _getch();
+                       
+                        if (rech == 13) break; // Enter 키를 누르면 입력 종료
+                        if (ch == 8) { // Backspace 키인 경우
+                            if (!renew_pw.empty()) { // 입력된 문자가 있으면
+                                renew_pw.pop_back(); // 마지막 문자를 삭제
+                                cout << "\b \b"; // 커서 위치를 왼쪽으로 이동시켜 공백을 출력한 뒤, 다시 커서 위치를 원래대로 이동시킴
+                            }
+                        }
+                        else {
+                            renew_pw.push_back(rech);
+                            cout << '*'; // 별표로 대체하여 출력
                         }
                     }
-                    else {
-                        renew_pw.push_back(rech);
-                        cout << '*'; // 별표로 대체하여 출력
-                    }
-                }
-                cout << endl;
+                    cout << endl;
 
-                if (new_pw == renew_pw)
-                {
-                    pstmt = con->prepareStatement("UPDATE user SET pw = ? WHERE id = ?");
-                    pstmt->setString(1, new_pw);
-                    pstmt->setString(2, id);
-                    pstmt->executeQuery();
-                    printf("New PW updated\n");
+                    if (new_pw == renew_pw)
+                    {
+                        pstmt = con->prepareStatement("UPDATE user SET pw = ? WHERE id = ?");
+                        pstmt->setString(1, new_pw);
+                        pstmt->setString(2, id);
+                        pstmt->executeQuery();
+                        printf("New PW updated\n");
+                        break;
+                    }
+                    else cout << "▶비밀번호가 다릅니다." << endl;
                 }
-                else cout << "비밀번호가 다릅니다." << endl;
             }
-            else  cout << "해당하는 정보가 없습니다." << endl;
+            else  cout << "▶해당하는 정보가 없습니다." << endl;
         }
-        else cout << "해당하는 정보가 없습니다." << endl;
+        else cout << "▶해당하는 정보가 없습니다." << endl;
     }
     void crateUser()
     {
         while (1)
         {
-            cout << "id";
+            cout << "아이디 : ";
             cin >> id;
             pstmt = con->prepareStatement("SELECT id FROM user WHERE id=?");
             pstmt->setString(1, id);
@@ -504,62 +525,73 @@ public:
             {
                 string db_id = result->getString(1);
                 if (db_id == id) {
-                    cout << "중복된 id가 있습니다." << endl;
+                    cout << "▶중복된 아이디가 있습니다." << endl;
+                    continue;
                 }
-                else {
-                    cout << "중복체크 완료." << endl;
-                }
+            }
+            else {
+                cout << "▶중복체크 완료." << endl;
+                break;
             }
         }
         while (1)
         {
-            cout << "pw";
+            string new_pw = "";
+            cout << "새로운 비밀번호를 입력해주세요 : ";
             char ch = ' ';
-            while (ch != 13)
-            { // Enter 키를 누르면 입력 종료
+            while (ch != 13) { // Enter 키를 누르면 입력 종료
                 ch = _getch();
                 if (ch == 13) break; // Enter 키를 누르면 입력 종료
                 if (ch == 8) { // Backspace 키인 경우
-                    if (!pw.empty()) { // 입력된 문자가 있으면
-                        pw.pop_back(); // 마지막 문자를 삭제
+                    if (!new_pw.empty()) { // 입력된 문자가 있으면
+                        new_pw.pop_back(); // 마지막 문자를 삭제
                         cout << "\b \b"; // 커서 위치를 왼쪽으로 이동시켜 공백을 출력한 뒤, 다시 커서 위치를 원래대로 이동시킴
                     }
                 }
                 else {
-                    pw.push_back(ch);
+                    new_pw.push_back(ch);
                     cout << '*'; // 별표로 대체하여 출력
                 }
             }
-            string re_pw = "";
-            cout << "renew_pw";
+            cout << endl;
+            string renew_pw = "";
+            cout << endl << "다시 한번 입력해주세요. : ";
             char rech = ' ';
-            while (rech != 13)
-            { // Enter 키를 누르면 입력 종료
+            while (rech != 13) { // Enter 키를 누르면 입력 종료
                 rech = _getch();
                 if (rech == 13) break; // Enter 키를 누르면 입력 종료
-                if (ch == 8) { // Backspace 키인 경우
-                    if (!re_pw.empty()) { // 입력된 문자가 있으면
-                        re_pw.pop_back(); // 마지막 문자를 삭제
+                if (rech == 8) { // Backspace 키인 경우
+                    if (!renew_pw.empty()) { // 입력된 문자가 있으면
+                        renew_pw.pop_back(); // 마지막 문자를 삭제
                         cout << "\b \b"; // 커서 위치를 왼쪽으로 이동시켜 공백을 출력한 뒤, 다시 커서 위치를 원래대로 이동시킴
                     }
                 }
                 else {
-                    re_pw.push_back(rech);
+                    renew_pw.push_back(rech);
                     cout << '*'; // 별표로 대체하여 출력
                 }
             }
-            if (pw == re_pw)
+            cout << endl;
+            if (new_pw == renew_pw)
             {
                 break;
             }
-            else cout << "비밀번호가 다릅니다." << endl;
+            else cout << "▶비밀번호가 다릅니다." << endl;
         }
         cout << "name";
         cin >> name;
         cout << "phone";
         cin >> phone;
-        cout << "birth 8자리입력";
-        cin >> birth;
+        while (true)
+        {
+            cout << "생년월일 : ";
+            cin >> birth;
+            if (birth.length() != 8) {
+                cout << "▶생년월일은 8자리로 입력해주세요." << endl;
+                continue;
+            }
+            break;
+        }
 
         string year = birth.substr(0, 4);
         string month = birth.substr(4, 2);
@@ -573,7 +605,7 @@ public:
         pstmt->setString(4, phone);
         pstmt->setString(5, DATE);
         pstmt->execute();
-        cout << "회원가입 완료." << endl;
+        cout << "▶회원가입 완료." << endl;
     }
     void myProfile()
     {
@@ -791,69 +823,160 @@ public:
         }
         else cout << "해당하는 정보가 없습니다." << endl;
     }
+    string getName()
+    {
+        return name;
+    }
 };
 
 int main()
 {
     SQL sql;
-    startMenu(); //시작 화면
-    int a;
-    cin >> a;
-    login();
-    sql.login(); //로그인 하기3
-    //searchId();
-    //sql.searchId(); //아이디 찾기
-    //searchPw();
-    //sql.searchPw(); //비밀번호 찾기
-    //createUser();
-    //sql.crateUser();//회원 가입
-    //mainMenu(); //메인 화면
-    //myMenu(); //내 정보 화면
-    //sql.myProfile(); //내 정보
-    //sql.updateStatus(); //상메 설정
-    //sql.updateSong(); //노래 설정
-    //friends(); //친구화면
-    //sql.friends(); //친구 목룍
-    //sql.searchBirth(); //친구 생일 검색
-    //setting(); //설정화면
-    //sql.modifyPw(); //비밀번호 변경
-    //sql.deleteUser(); //회원 탈퇴
-    //system("pause");
+    bool loginSuccess = false;
+    while (!loginSuccess)
+    {
+        startMenu(); //시작 화면
+        char startIn=0;
+        cout << "▶ ";
+        cin >> startIn;
+        switch (startIn)
+        {
+        case '1': //로그인
+            login();
+            if (sql.login() == 1) { 
+                loginSuccess = true;
+                    break; }
+            continue;
+        case '2': //아이디 찾기
+            searchId();
+            sql.searchId();
+            continue;
 
-    WSADATA wsa;
-    int code = WSAStartup(MAKEWORD(2, 2), &wsa);
+        case '3': //비밀번호찾기
+            searchPw();
+            sql.searchPw();
+            continue;
 
-    if (!code) {
-        cout << "login on";
-        client_sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+        case '4': //회원가입
+            createUser();
+            sql.crateUser();
+            continue;
+        case '0':
+            return -1;
+        default:
+            cout << "잘못된 입력입니다. 다시 입력해주세요." << endl;
+            continue;
+        }
 
-        SOCKADDR_IN client_addr = {};
-        client_addr.sin_family = AF_INET;
-        client_addr.sin_port = htons(7777);
-        InetPton(AF_INET, TEXT("127.0.0.1"), &client_addr.sin_addr);
-
-        while (1) {
-            if (!connect(client_sock, (SOCKADDR*)&client_addr, sizeof(client_addr))) {
-                cout << "Server Connect" << endl;
-                send(client_sock, my_nick.c_str(), my_nick.length(), 0);
-                break;
+    }
+    while (1)
+    {
+        mainMenu(); //메인 화면
+        int mainIn = 0;
+        cout << "▶ ";
+        cin >> mainIn;
+        if (mainIn == 1) //내정보
+        {
+            myMenu();
+            bool backButton = false;
+            while (!backButton)
+            {
+                char informationIn = 0;
+                cout << "▶ ";
+                cin >> informationIn;
+                switch (informationIn)
+                {
+                case '1':
+                    sql.myProfile();
+                    break;
+                case '2':
+                    sql.updateStatus(); //상메 설정
+                    continue;
+                case '3':
+                    sql.updateSong(); //노래 설정
+                    continue;
+                case '0':
+                    backButton = true;
+                    break;
+                default:
+                    cout << "잘못 누르셨습니다." << endl;
+                    continue;
+                }
             }
-            cout << "Connecting..." << endl;
         }
-
-        std::thread th2(chat_recv);
-
-        while (1) {
-            string text;
-            std::getline(cin, text);
-            const char* buffer = text.c_str(); // string형을 char* 타입으로 변환
-            send(client_sock, buffer, strlen(buffer), 0);
-        }
-        th2.join();
-        closesocket(client_sock);
     }
 
-    WSACleanup();
+        //else if(mainIn== '2') //친구
+        //{
+        //    
+        //  
+        //    continue;
+
+        //case '3': //대화방
+        //    searchPw();
+        //    sql.searchPw();
+        //    continue;
+
+        //case '4': //설정
+        //    createUser();
+        //    sql.crateUser();
+        //    continue;
+        //case '0': //종료
+        //    return -1;
+        //default:
+        //    cout << "잘못된 입력입니다. 다시 입력해주세요." << endl;
+        //    continue;
+        //}
+        
+        
+        //
+        //
+        //friends(); //친구화면
+        //sql.friends(); //친구 목룍
+        //sql.searchBirth(); //친구 생일 검색
+        // //채팅화면
+        //setting(); //설정화면
+        //sql.modifyPw(); //비밀번호 변경
+        //sql.deleteUser(); //회원 탈퇴
+        //system("pause");
+
+        WSADATA wsa;
+        int code = WSAStartup(MAKEWORD(2, 2), &wsa);
+
+        if (!code) {
+            cout << "login on-" << my_nick;
+            my_nick = sql.getName();
+            client_sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+
+            SOCKADDR_IN client_addr = {};
+            client_addr.sin_family = AF_INET;
+            client_addr.sin_port = htons(7777);
+            InetPton(AF_INET, TEXT("127.0.0.1"), &client_addr.sin_addr);
+
+            while (1) {
+                if (!connect(client_sock, (SOCKADDR*)&client_addr, sizeof(client_addr))) {
+                    cout << "Server Connect" << endl;
+                    send(client_sock, my_nick.c_str(), my_nick.length(), 0);
+                    break;
+                }
+                cout << "Connecting..." << endl;
+            }
+
+            std::thread th2(chat_recv);
+
+            while (1) {
+                string text;
+                std::getline(cin, text);
+                const char* buffer = text.c_str(); // string형을 char* 타입으로 변환
+                send(client_sock, buffer, strlen(buffer), 0);
+            }
+            th2.join();
+            closesocket(client_sock);
+        }
+        WSACleanup();
+    
+
+
 
     delete result;
     delete pstmt;

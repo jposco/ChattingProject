@@ -31,6 +31,11 @@ SOCKET_INFO server_sock; //서브소켓의 정보를 저장할 정보.
 int client_count = 0; //현재 접속된 클라이언트 수 카운트 용도.
 
 //SQL
+sql::mysql::MySQL_Driver* driver; // 추후 해제하지 않아도 Connector/C++가 자동으로 해제해 줌 
+sql::Connection* con;
+sql::PreparedStatement* pstmt;
+sql::ResultSet* result;
+sql::Statement* stmt;
 void startSql(); //SQL실행 - creatTable;
 
 //시스템구동
@@ -51,12 +56,9 @@ int main()
     int code = WSAStartup(MAKEWORD(2, 2), &wsa);
 
     if (!code) {
-        server_init();
+        server_init(); //서버 연결
 
-        std::thread th1[MAX_CLIENT]; //쓰레드를 담는 배열 th1 , 배열에 담긴 자료형은 thread
-        //크기가 맥스클라이언트인 배열 생성.
-        //쓰레드란 ! add_client 가 잘끝날때까지 대기할 수 있는 공간을 만든다?
-        //잘 끝나지않을경우 메인함수를 종료시키지 않는다
+        std::thread th1[MAX_CLIENT];
 
         for (int i = 0; i < MAX_CLIENT; i++) {
             th1[i] = std::thread(add_client);
@@ -89,11 +91,6 @@ int main()
 void startSql()
 {
       // MySQL Connector/C++ 초기화
-    sql::mysql::MySQL_Driver* driver; // 추후 해제하지 않아도 Connector/C++가 자동으로 해제해 줌 
-    sql::Connection* con;                                                                        
-    sql::PreparedStatement* pstmt;                                                               
-    sql::ResultSet* result;  
-    sql::Statement* stmt;
 
     try {                                                                                        
         driver = sql::mysql::get_mysql_driver_instance();                               
@@ -111,34 +108,6 @@ void startSql()
     stmt = con->createStatement();                                                      
     stmt->execute("set names euckr");                                                   
     if (stmt) { delete stmt; stmt = nullptr; }                                          
-
-    //// 데이터베이스 쿼리 실행                                                               
-    //stmt = con->createStatement();                                                      
-    ////stmt->execute("DROP TABLE IF EXISTS inventory"); // DROP                  
-    ////cout << "Finished dropping table (if existed)" << endl;
-    ////CREAT
-    //stmt->execute("CREATE TABLE user\
-    //    (id VARCHAR(50) NOT NULL PRIMARY KEY,\
-    //    pw VARCHAR(50) NOT NULL,\
-    //    name VARCHAR(10) NOT NULL,\
-    //    phone INT NOT NULL,\
-    //    status VARCHAR(50),\
-    //    birth DATE NOT NULL,\
-    //    song VARCHAR(50));");
-    //cout << "Finished creating user table" << endl;
-
-    //stmt->execute("CREATE TABLE chatting (\
-    //    sequence INT NOT NULL PRIMARY KEY AUTO_INCREMENT,\
-    //    chatname VARCHAR(10) NOT NULL,\
-    //    time TIMESTAMP NOT NULL,\
-    //    send VARCHAR(1024),\
-    //    recv VARCHAR(1024),\
-    //    chat_id VARCHAR(50) NOT NULL,\
-    //    foreign key(chat_id) references user(id)\
-    //    ON UPDATE CASCADE ON DELETE CASCADE);");
-    //cout << "Finished creating chatting table" << endl;
-
-    //delete stmt;
 }
 
 void mainMenu()
@@ -181,7 +150,6 @@ void server_init() //서버측 소켓 활성화
     listen(server_sock.sck, SOMAXCONN);
 
     server_sock.user = "server";
-    mainMenu();
 }
 
 void add_client() {
@@ -239,7 +207,13 @@ void recv_msg(int idx) {
             msg = sck_list[idx].user + " : " + buf;
             cout << msg << endl;
             send_msg(msg.c_str());
+
+            pstmt = con->prepareStatement("INSERT INTO chatting(chatname, time, recv) VALUE(?, NOW(),  ?)");
+            pstmt->setString(1, sck_list[idx].user);
+            pstmt->setString(2, buf);
+            pstmt->execute();
         }
+
         else {
             msg = "[공지] " + sck_list[idx].user + " 님이 퇴장했습니다.";
             cout << msg << endl;
