@@ -36,6 +36,7 @@ struct SOCKET_INFO { //구조체 정의
 vector<SOCKET_INFO> sck_list; //서버에 연결된 client를 저장할 변수.
 SOCKET_INFO server_sock; //서브소켓의 정보를 저장할 정보.
 int client_count = 0; //현재 접속된 클라이언트 수 카운트 용도.
+int real_client_count = 0;
 
 //SQL
 sql::mysql::MySQL_Driver* driver; // 추후 해제하지 않아도 Connector/C++가 자동으로 해제해 줌 
@@ -94,6 +95,7 @@ int main()
     delete result;
     delete pstmt;
     delete con;
+    delete stmt;
 
     return 0;
 }
@@ -123,23 +125,23 @@ void startSql()
 void mainMenu()
 {
     cout << "\n\n";
-    cout << "\t"; cout << "********************************** \n";
-    cout << "\t"; cout << "*                                * \n";
-    cout << "\t"; cout << "*  *******    *     *     *  *   * \n";
-    cout << "\t"; cout << "*     *      * *    *     * *    * \n";
-    cout << "\t"; cout << "*     *     *****   *     **     * \n";
-    cout << "\t"; cout << "*     *    *     *  *     * *    * \n";
-    cout << "\t"; cout << "*     *   *       * ***** *  *   * \n";
-    cout << "\t"; cout << "*                                * \n";
-    cout << "\t"; cout << "*                                * \n";
-    cout << "\t"; cout << "*                                * \n";
-    cout << "\t"; cout << "*                                * \n";
-    cout << "\t"; cout << "*            SERVER ON           * \n";
-    cout << "\t"; cout << "*                                * \n";
-    cout << "\t"; cout << "*                                * \n";
-    cout << "\t"; cout << "*                                * \n";
-    cout << "\t"; cout << "*                                * \n";
-    cout << "\t"; cout << "********************************** \n\n";
+    cout << " "; cout << "********************************** \n";
+    cout << " "; cout << "*                                * \n";
+    cout << " "; cout << "*  *******    *     *     *  *   * \n";
+    cout << " "; cout << "*     *      * *    *     * *    * \n";
+    cout << " "; cout << "*     *     *****   *     **     * \n";
+    cout << " "; cout << "*     *    *     *  *     * *    * \n";
+    cout << " "; cout << "*     *   *       * ***** *  *   * \n";
+    cout << " "; cout << "*                                * \n";
+    cout << " "; cout << "*                                * \n";
+    cout << " "; cout << "*                                * \n";
+    cout << " "; cout << "*                                * \n";
+    cout << " "; cout << "*            SERVER ON           * \n";
+    cout << " "; cout << "*                                * \n";
+    cout << " "; cout << "*                                * \n";
+    cout << " "; cout << "*                                * \n";
+    cout << " "; cout << "*                                * \n";
+    cout << " "; cout << "********************************** \n\n";
 }
 
 void server_init() //서버측 소켓 활성화
@@ -172,60 +174,67 @@ void add_client() {
     recv(new_client.sck, buf, MAX_SIZE, 0); 
     new_client.user = string(buf);
 
-    string msg = "[공지] " + new_client.user + " 님이 입장했습니다.";
-    //정제철(제주삼다수)님이 입장했습니다.
+    string msg = "▶" + new_client.user + " 님이 입장했습니다.";
     cout << msg << endl;
     sck_list.push_back(new_client);
-    cout << "sock" << sck_list[0].sck << endl;
     std::thread th(recv_msg, client_count);
     client_count++;
+    real_client_count++;
 
-    cout << "[공지] 현재 접속자 수 : " << client_count << "명" << endl;
+    cout << "▷현재 접속자 수 : " << real_client_count << "명" << endl;
     send_msg(msg.c_str());
 
     th.join();
 }
 
-void send_msg(const char* msg) {
+void send_msg(const char* msg)
+{
     for (int i = 0; i < client_count; i++) {
         send(sck_list[i].sck, msg, MAX_SIZE, 0);
     }
 }
-void handle_input(int idx, const char* buf) {
-    if (strcmp(buf, "/exit") == 0) {
-        string msg = "client " + to_string(idx) + " has left the chat room";
-        cout << msg << endl;
-        send_msg(msg.c_str());
-        del_client(idx);
-    }
-    else {
-        // handle normal message
-    }
-}
+
 void recv_msg(int idx) {
     char buf[MAX_SIZE] = { };
     string msg = "";
 
     while (1) {
         ZeroMemory(&buf, MAX_SIZE);//0로 초기화
-        cout << "sockkkkk : " << sck_list[idx].sck;
 
         if (recv(sck_list[idx].sck, buf, MAX_SIZE, 0) > 0) {
-            cout << "aa : " << buf;
-            handle_input(idx, buf);//대기. 메세지가 들어오면 0보다 커진다
-            msg = sck_list[idx].user + " : " + buf;
-            cout << msg << endl;
-            send_msg(msg.c_str());
-
+            //handle_input(idx, buf);//대기. 메세지가 들어오면 0보다 커진다
+            if (strcmp(buf, "/exit") == 0) {
+                cout << "aaaaaaa" << endl;
+                msg = "▶" + sck_list[idx].user + " 님이 퇴장했습니다.";
+                cout << msg << endl;
+                //del_client(idx);
+                real_client_count--;
+                return;
+            }
+    
             pstmt = con->prepareStatement("INSERT INTO chatting(chatname, time, recv) VALUE(?, NOW(),  ?)");
             pstmt->setString(1, sck_list[idx].user);
             pstmt->setString(2, buf);
             pstmt->execute();
+
+            pstmt = con->prepareStatement("SELECT chatname, time, recv FROM chatting ORDER BY time DESC LIMIT 1");
+            result = pstmt->executeQuery();
+            if (result->next())
+            {
+                string chatname = result->getString(1);
+                string time = result->getString(2);
+                string recv = result->getString(3);
+                msg = "----------------------------------------------------------------\n";
+                msg += "▷보낸 사람 : " + chatname + "\t\t" + "▷보낸 시간 : " + time + "\n";
+                msg += "▷내용 : " + recv + "\n";
+                msg += "---------------------------------------------------------------\n";
+                cout << msg<<endl;
+                send_msg(msg.c_str());
+            }
         }
 
         else {
-            cout << "bb : ";
-            msg = "[공지] " + sck_list[idx].user + " 님이 퇴장했습니다.";
+            msg = "▶" + sck_list[idx].user + " 님이 퇴장했습니다.";
             cout << msg << endl;
             send_msg(msg.c_str());
             del_client(idx);
@@ -236,7 +245,6 @@ void recv_msg(int idx) {
 
 void del_client(int idx) {
     closesocket(sck_list[idx].sck);
-    sck_list.clear();
     client_count--;
 }
 

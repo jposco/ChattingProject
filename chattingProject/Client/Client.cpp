@@ -1064,15 +1064,12 @@ int main()
                         {
                             if (!connect(client_sock, (SOCKADDR*)&client_addr, sizeof(client_addr))) {
                                 cout << "※지인을 사칭하여 금전을 요구할 수 있으니, 도용이 의심 된다면 대화를 중단해주시기 바랍니다." << endl;
-                                cout << "nick " <<  my_nick;
                                 send(client_sock, my_nick.c_str(), my_nick.length(), 0);
                                 break;
                             }
                             cout << "Connecting..." << endl;
                         }
-
                         std::thread th2(chat_recv);
-
                         while (1)
                         {
                             string text;
@@ -1080,12 +1077,13 @@ int main()
                             const char* buffer = text.c_str(); // string형을 char* 타입으로 변환
                             send(client_sock, buffer, strlen(buffer), 0);
                             if (text == "/exit") {
+                                closesocket(client_sock);
                                 backButton = true;
                                 break;
                             }
                         }
                         th2.join();
-                        closesocket(client_sock);
+                        
                     }
                     WSACleanup();
                     break;
