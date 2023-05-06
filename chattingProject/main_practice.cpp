@@ -5,8 +5,15 @@
 #include <string>
 #include <thread>
 #include <vector>
+#include <string>
 #include <mysql/jdbc.h>
+#include <sstream>
 
+std::string to_string(int value) {
+    std::ostringstream os;
+    os << value;
+    return os.str();
+}
 using std::cout;
 using std::cin;
 using std::endl;
@@ -51,7 +58,7 @@ void del_client(int idx); //클라이언트와의 연결을 끊을 때
 int main()
 {
     startSql();
-
+    mainMenu();
     WSADATA wsa;
     int code = WSAStartup(MAKEWORD(2, 2), &wsa);
 
@@ -84,7 +91,10 @@ int main()
         cout << "프로그램 종료. (Error code : " << code << ")";
     }
     WSACleanup();
-   
+    delete result;
+    delete pstmt;
+    delete con;
+
     return 0;
 }
 
@@ -135,8 +145,6 @@ void mainMenu()
 void server_init() //서버측 소켓 활성화
 {
     server_sock.sck = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-    //서버 소켓을 특정할 수 있는 int형 숫자를 담음.
-    //server_sock의 sck -> SOCKET_INFO sck, user
 
     SOCKADDR_IN server_addr = {};
     server_addr.sin_family = AF_INET;
@@ -144,8 +152,6 @@ void server_init() //서버측 소켓 활성화
     server_addr.sin_addr.s_addr = htonl(INADDR_ANY); //123.0.0.1:----을 정의한다.
 
     bind(server_sock.sck, (sockaddr*)&server_addr, sizeof(server_addr));
-    //server_sock.sck, 주소를 할당하고 싶은 socket
-    //server_adrr의 자료형 SOCKADDR_IN을 sockaddr*형으로 변환
 
     listen(server_sock.sck, SOMAXCONN);
 
@@ -153,8 +159,6 @@ void server_init() //서버측 소켓 활성화
 }
 
 void add_client() {
-    //클라이언트와 연결을 성공하면 서버에 새로운 소켓이 생성된다.
-    //그 소켓의 주소를 담을 변수 => addr이다.
     SOCKADDR_IN addr = {};
     int addrsize = sizeof(addr);
     char buf[MAX_SIZE] = { }; //메시지의 최대길이를 설정해준다. 1024
@@ -162,29 +166,21 @@ void add_client() {
     ZeroMemory(&addr, addrsize); //addr을 0x00으로 초기화
 
     SOCKET_INFO new_client = {};
-    //sck, user : 클라이언트의 소켓 정보를 저장, 밑에서 sck_list에 추가함.
 
     new_client.sck = accept(server_sock.sck, (sockaddr*)&addr, &addrsize);
-    //소켓 주소, 주소의 길이
-    //클라이언트 수만큼 accept실행 connect()
-    recv(new_client.sck, buf, MAX_SIZE, 0); //클라이언트 connect(), send()
-    //클라이언트 측에서 바로 user 이름을 담아서 send를 함. recv()로 받기 위해
-    new_client.user = string(buf); //buf엔 사용자가 입력한 이름이 들어있다.
-    //user는 char형으로 들어오기 때문에 string형으로 형변환 해줘서 저장.
+
+    recv(new_client.sck, buf, MAX_SIZE, 0); 
+    new_client.user = string(buf);
 
     string msg = "[공지] " + new_client.user + " 님이 입장했습니다.";
     //정제철(제주삼다수)님이 입장했습니다.
     cout << msg << endl;
-    sck_list.push_back(new_client); //sck_list에 추가함.
-    //[ {1234, jechul}, { 1234, jechul }, { 1234, jechul } ]
-
-    std::thread th(recv_msg, client_count);//join을 만나는 순간까지 대기를 한다.
-    //끝나지않도록 대기시키기위해 thread를 사용한다.
-    //방금 생성된 클라이언트가 앞으로도 계속 메시지를 받을 수 있도록 recv실행 대기
+    sck_list.push_back(new_client);
+    cout << "sock" << sck_list[0].sck << endl;
+    std::thread th(recv_msg, client_count);
     client_count++;
 
     cout << "[공지] 현재 접속자 수 : " << client_count << "명" << endl;
-    //참여자 : 윤소라, 정제철
     send_msg(msg.c_str());
 
     th.join();
@@ -193,17 +189,30 @@ void add_client() {
 void send_msg(const char* msg) {
     for (int i = 0; i < client_count; i++) {
         send(sck_list[i].sck, msg, MAX_SIZE, 0);
-        //현재 접속한 모든 클라이언트에게 send메시지 한다
     }
 }
-
+void handle_input(int idx, const char* buf) {
+    if (strcmp(buf, "/exit") == 0) {
+        string msg = "client " + to_string(idx) + " has left the chat room";
+        cout << msg << endl;
+        send_msg(msg.c_str());
+        del_client(idx);
+    }
+    else {
+        // handle normal message
+    }
+}
 void recv_msg(int idx) {
     char buf[MAX_SIZE] = { };
     string msg = "";
 
     while (1) {
         ZeroMemory(&buf, MAX_SIZE);//0로 초기화
-        if (recv(sck_list[idx].sck, buf, MAX_SIZE, 0) > 0) {//대기. 메세지가 들어오면 0보다 커진다
+        cout << "sockkkkk : " << sck_list[idx].sck;
+
+        if (recv(sck_list[idx].sck, buf, MAX_SIZE, 0) > 0) {
+            cout << "aa : " << buf;
+            handle_input(idx, buf);//대기. 메세지가 들어오면 0보다 커진다
             msg = sck_list[idx].user + " : " + buf;
             cout << msg << endl;
             send_msg(msg.c_str());
@@ -215,6 +224,7 @@ void recv_msg(int idx) {
         }
 
         else {
+            cout << "bb : ";
             msg = "[공지] " + sck_list[idx].user + " 님이 퇴장했습니다.";
             cout << msg << endl;
             send_msg(msg.c_str());
@@ -226,6 +236,7 @@ void recv_msg(int idx) {
 
 void del_client(int idx) {
     closesocket(sck_list[idx].sck);
+    sck_list.clear();
     client_count--;
 }
 
