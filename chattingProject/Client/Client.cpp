@@ -1,6 +1,6 @@
 #pragma comment(lib, "ws2_32.lib")
 
-#include <WinSock2.h> //Winsock 헤더파일 include. WSADATA 들어있음.
+#include <WinSock2.h>
 #include <WS2tcpip.h>
 #include <string>
 #include <sstream>
@@ -929,9 +929,9 @@ public:
 int main()
 {
     SQL sql;
-
-    //시작화면 구현부
     bool loginSuccess = false;
+
+    //시작화면 구현부    
     while (!loginSuccess)
     {
         startMenu(); //시작 화면
@@ -976,6 +976,7 @@ int main()
         int mainIn = 0;
         cout << "▶ ";
         cin >> mainIn;
+
         //내정보 구현부
         if (mainIn == 1)
         {
@@ -1006,6 +1007,7 @@ int main()
                 }
             }
         }
+
         //친구 구현부
         else if (mainIn == 2)
         {
@@ -1033,6 +1035,7 @@ int main()
                 }
             }
         }
+
         //채팅방 구현부
         else if (mainIn == 3)
         {
@@ -1099,6 +1102,7 @@ int main()
                 }
             }
         }
+
         //설정부 구현
         else if (mainIn == 4)
         {
@@ -1126,13 +1130,21 @@ int main()
                 }
             }
         }
+
+        //종료 버튼
+        else if (mainIn == 0)
+        {
+            cout << "프로그램을 종료합니다." << endl;
+            return 0;
+            }
+
         else cout << "▶잘못된 입력입니다. 다시 입력해주세요." << endl;
     }    
+
     delete result;
     delete pstmt;
     delete con;
     delete stmt;
-
     return 0;
 }
 
