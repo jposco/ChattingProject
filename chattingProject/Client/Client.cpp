@@ -324,8 +324,7 @@ int chat_recv() {
             //닉네임 : 메시지
             std::stringstream ss(msg);  // 문자열을 스트림화
             string user;
-            ss >> user; // 스트림을 통해, 문자열을 공백 분리해 변수에 할당
-            //띄어쓰기를 기준으로 닉네임 추출
+            ss >> user; 
             if (user != my_nick) cout << buf << endl; // 내 닉네임과 대조한 후 내가 보낸 게 아닐 경우(상대방)에만 출력하도록.
         }
         else {
@@ -334,6 +333,11 @@ int chat_recv() {
         }
     }
 }
+void sendDM(string target_nick, string message) {
+    string full_message = "DM FROM " + my_nick + ": " + message;
+    send(client_sock, full_message.c_str(), full_message.length(), 0);
+}
+
 
 class SQL
 {
@@ -935,16 +939,17 @@ int main()
     while (!loginSuccess)
     {
         startMenu(); //시작 화면
-        char startIn=0;
+        char startIn = 0;
         cout << "▶ ";
         cin >> startIn;
         switch (startIn)
         {
         case '1': //로그인
             login();
-            if (sql.login() == 1) { 
+            if (sql.login() == 1) {
                 loginSuccess = true;
-                    break; }
+                break;
+            }
             continue;
         case '2': //아이디 찾기
             searchId();
@@ -1077,16 +1082,17 @@ int main()
                         {
                             string text;
                             std::getline(cin, text);
+                         
                             const char* buffer = text.c_str(); // string형을 char* 타입으로 변환
                             send(client_sock, buffer, strlen(buffer), 0);
-                            if (text == "/exit") {
+                            if (text == "/exit")
+                            {
                                 closesocket(client_sock);
                                 backButton = true;
                                 break;
-                            }
+                            }                          
                         }
                         th2.join();
-                        
                     }
                     WSACleanup();
                     break;
@@ -1100,8 +1106,9 @@ int main()
                     cout << "▶잘못된 입력입니다. 다시 입력해주세요." << endl;
                     continue;
                 }
+
             }
-        }
+        }  
 
         //설정부 구현
         else if (mainIn == 4)

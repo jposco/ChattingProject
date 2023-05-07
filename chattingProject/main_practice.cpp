@@ -56,6 +56,7 @@ void send_msg(const char* msg); //send() 실행
 void recv_msg(int idx); //recv() 실행
 void del_client(int idx); //클라이언트와의 연결을 끊을 때
 
+
 int main()
 {
     startSql();
@@ -204,7 +205,6 @@ void recv_msg(int idx) {
         if (recv(sck_list[idx].sck, buf, MAX_SIZE, 0) > 0) {
             //handle_input(idx, buf);//대기. 메세지가 들어오면 0보다 커진다
             if (strcmp(buf, "/exit") == 0) {
-                cout << "aaaaaaa" << endl;
                 msg = "▶" + sck_list[idx].user + " 님이 퇴장했습니다.";
                 cout << msg << endl;
                 //del_client(idx);
