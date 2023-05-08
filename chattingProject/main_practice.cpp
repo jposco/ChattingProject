@@ -128,10 +128,9 @@ void send_msg_notMe(const char* msg, int sender_idx)
 
 void send_msg(const char* msg)
 {
-
-    for (int i = 0; i < client_count; i++) {
-            send(sck_list[i].sck, msg, MAX_SIZE, 0);
-        
+    for (int i = 0; i < client_count; i++)
+    {
+        send(sck_list[i].sck, msg, MAX_SIZE, 0);
     }
 }
 void add_client() {
@@ -159,17 +158,34 @@ void add_client() {
     cout << "▷현재 접속자 수 : " << client_count << "명" << endl;
     send_msg(msg.c_str());
 }
-
+void sendWhisper(int position, string sbuf, int idx)
+{
+    int cur_position = position + 1;
+    position = sbuf.find(" ", cur_position);
+    int len = position - cur_position;
+    string receiver = sbuf.substr(cur_position, len);
+    cur_position = position + 1;
+    string dm = sbuf.substr(cur_position);
+    string msg = "※귓속말 도착※ ☞" + sck_list[idx].user + " - " + dm;
+    for (int i = 0; i < client_count; i++)
+    {
+        if (receiver.compare(sck_list[i].user) == 0)
+            send(sck_list[i].sck, msg.c_str(), MAX_SIZE, 0);
+    }
+}
 void recv_msg(int idx) {
     char buf[MAX_SIZE] = { };
     string msg = "";
 
     while (1) {
-        ZeroMemory(&buf, MAX_SIZE);//0로 초기화
+        ZeroMemory(&buf, MAX_SIZE);
 
         if (recv(sck_list[idx].sck, buf, MAX_SIZE, 0) > 0) {
-        
-            if(string(buf) == "/exit")
+            string whisper(buf);
+            int position = whisper.find(" ", 0);
+            int message = position - 0;
+            string flag = whisper.substr(0, message);
+            if(string(buf) == "/종료")
             {
                 msg = "▶" + sck_list[idx].user + " 님이 퇴장했습니다.";
                 cout << msg << endl;
@@ -177,9 +193,9 @@ void recv_msg(int idx) {
                 del_client(idx);
                 return;
             }
-            else if (string(buf) == "/DM")
+            else if (flag.compare("/귓말") == 0)
             {
-
+                sendWhisper(position, whisper, idx);
             }
 
             else {
@@ -196,14 +212,20 @@ void recv_msg(int idx) {
                     string chatname = result->getString(1);
                     string time = result->getString(2);
                     string recv = result->getString(3);
-                    msg = "----------------------------------------------------------------\n";
+                    msg = "---------------------------------------------------------------\n";
                     msg += "▷보낸 사람 : " + chatname + "\t\t" + "▷보낸 시간 : " + time + "\n";
                     msg += "▷내용 : " + recv + "\n";
                     msg += "---------------------------------------------------------------\n";
-                    cout << msg << endl;
                     send_msg_notMe(msg.c_str(), idx);
                 }
             }
+        }
+        else { //그렇지 않을 경우 퇴장에 대한 신호로 생각하여 퇴장 메시지 전송
+            msg = "[공지] " + sck_list[idx].user + " 님이 퇴장했습니다.";
+            cout << msg << endl;
+            send_msg(msg.c_str());
+            del_client(idx); // 클라이언트 삭제
+            return;
         }
     }
 }

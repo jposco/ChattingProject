@@ -280,12 +280,13 @@ void chatting()
     cout << " "; cout << "*                               * \n";
     cout << " "; cout << "*      1. 채팅방 입장           * \n";
     cout << " "; cout << "*                               * \n";
-    cout << " "; cout << "*      >> /exit 입력시 퇴장     * \n";
+    cout << " "; cout << "*      >> /귓말 이름 내용입력   * \n";
+    cout << " "; cout << "*                               * \n";
+    cout << " "; cout << "*      >> /종료 입력시 퇴장     * \n";
     cout << " "; cout << "*                               * \n";
     cout << " "; cout << "*      2. 채팅 내용 검색        * \n";
     cout << " "; cout << "*                               * \n";
     cout << " "; cout << "*      0. 뒤로가기              * \n";
-    cout << " "; cout << "*                               * \n";
     cout << " "; cout << "*                               * \n";
     cout << " "; cout << "********************************* \n\n";
 }
@@ -329,7 +330,7 @@ int chat_recv() {
     while (1) {
         ZeroMemory(&buf, MAX_SIZE);
         if (recv(client_sock, buf, MAX_SIZE, 0) > 0) {
-            textColor(0, 7);
+            textColor(7, 0);
             msg = buf;
             //닉네임 : 메시지
             std::stringstream ss(msg);  // 문자열을 스트림화
@@ -1071,7 +1072,7 @@ public:
 
                                 const char* buffer = text.c_str(); // string형을 char* 타입으로 변환
                                 send(client_sock, buffer, strlen(buffer), 0);
-                                if (text == "/exit")
+                                if (text == "/종료")
                                 {
                                     closesocket(client_sock);
                                     backButton = true;
