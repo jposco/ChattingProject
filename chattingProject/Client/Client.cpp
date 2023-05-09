@@ -917,7 +917,7 @@ public:
 
     int main()
     {
-        SQL sql;
+        SQL sql; 
         bool loginSuccess = false;
 
         //시작화면 구현부    
