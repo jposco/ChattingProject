@@ -1,0 +1,46 @@
+//< main branch와 내 branch 병합하기 test -> main >
+//레퍼지토리 세팅스 밑에 오토 합병 체크하기
+// creat pull requests 누르기
+// pull request > new pull request
+//base : main / compare"개발한 브랜치"
+//merge pull request
+//git chectout ma in -> git pull
+// // 원래 브랜치 버리고, 새브랜치를 또 파서 코딩한다
+//---------최신상태의 main상태-----------------------
+// git checkout -b test2 (브랜치 생성후 checkout된다)
+// 
+//compare & pull request 누르기
+//제목작성후 작성 
+
+
+1. 한 사람이 repo 만들기
+2. 위 한 사람은 다른 한 사람을 초대
+2-1. settings > collaborators > Manage access > 팀원 추가(add people)
+3. 각자 local에서 clone
+4. 브랜치 만들기
+git branch "브랜치명"
+git checkout  "브랜치명"
+5. 작업한다. (개발한다)
+6. 개발 완료되면 git add, commit, push
+git add .
+git commit -m "커밋 내용"
+git push origin "브랜치명"
+7. github으로 돌아간다. main브랜치와 내 브랜치 병합하려고
+8. repository 소유자 > settings > 스크롤 아래로 > Automatically delete head branches 체크하기
+9. pull request > new pull request
+base : main / compare : "개발한 브랜치"
+9-1. 리뷰 규칙이 있다면 ,,, 하고
+10. merge pull request
+-----------------------------------------------
+원래 브랜치 버리고, 새 브랜치 파야함.
+11. git checkout main   >   git pull
+12. 다시 브랜치 생성
+git checkout -b "새로운 브랜치 명"
+
+브랜치확인
+local : git branch
+remote : git branch -r
+
+브랜치 삭제하기
+git branch -D test3
+

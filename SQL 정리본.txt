@@ -1,0 +1,169 @@
+-cmd
+/programFiles/MySQL/MySQL Server 8.0/bin>mysql -u root -p;
+show databases;
+use posco;
+show tables;
+desc 
+
+-스키마 생성
+CREATE DATABASE posco
+DEFAULT CHARACTER SET utf8
+DEFAULT COLLATE utf8_general_ci;
+
+-스키마 삭제
+DROP SCHEMA posco;
+
+-스키마 사용
+USE poscol;
+
+-테이블 생성
+DROP TABLE IF EXISTS user;
+CREATE TABLE user (
+id VARCHER(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+name VARCHAR(10) NOT NULL,
+addr VARCHAR(20) NOT NULL,
+phone INT,
+ON UPDATE CASCADE ON DELETE CASCADE);
+
+-테이블 초기화 & 삭제
+TRUNCATE TABLE orders;
+DROP TABLE orders;
+
+-참조키 생성
+CREATE TABLE orders (
+orderid INT NOT NULL PRIMARY KEY,
+userid VARCHAR(10) NOT NULL,
+prodname VARCHAR(20), 
+foreign key(userid) references user(id) );
+
+-새로운 열(속성) 추가
+ALTER TABLE user ADD gender CHAR(1);
+
+-특정 열(속성) 수정
+ALTER TABLE user
+MODIFY phone char(15);
+
+-특정 열(속성) 제거
+ALTER TABLE user DROP gender;
+
+-
+TRUNCATE TABLE orders;
+drop table orders;
+
+-테이블 삭제
+DROP TABLE user;
+
+-테이블 속성 보기
+desc user;
+
+--------------------------------
+-테이블 내용 보기
+SELECT * FROM user;
+
+-튜플 삽입 명령어
+INSERT INTO user VALUES
+('posco','정제철','영등포'),
+('godeok','제처루','제물포');
+
+-튜플 삭제 명령어
+DELETE FROM user
+WHERE name = '정제철';
+
+-튜플 내용 변경 명령어
+UPDATE user
+SET id='jposco'
+WHERE name='정제철'
+
+-튜플 검색 명령어
+SELECT *
+FROM user
+WHERE birthday
+order by birthday asc|desc;
+
+-JOIN활용하여 location 확인하기
+SELECT e.name, d.name
+FROM employees e
+JOIN departments d ON e.department_id = d.id
+WHERE d.location = 'New York';
+
+---------------------------------
+<WHERE 조건생성>
+-6월생일
+WHERE MONTH(birthday)=6;
+
+-25세 이상 50세 이하
+WHERE age >= 25 and age <= 50;
+
+-1970년대생
+WHERE birthday
+BETWEEN '1970-01-01' and '1979-12-31';
+
+-직원 수(count())를 계산합니다.
+SELECT count(*) from employees;
+
+-각 부서별 직원 수를 계산합니다.
+SELECT department_id,count(department_id)
+FROM employees
+GROUP BY department_id;
+
+-직원 평균 나이를 계산합니다.
+SELECT AVG(age) FROM employees;
+
+-부서별 평균 나이를 계산합니다.
+SELECT department_id,AVG(age) FROM employees
+GROUP BY department_id;
+sum(age), max(age), min(age)도 가능
+
+-부서 테이블에서 지역 컬럼의 두번째 글자가 e인 부서를 조회합니다.
+SELECT * FROM departments
+WHERE location LIKE '_e%';
+
+-부서 테이블에서 지역 컬럼에 공백이 들어가는 부서를 조회합니다.
+SELECT * FROM departments
+WHERE location LIKE '% %';
+
+-직원 테이블 이름마지막에 'n' 들어간거
+SELECT * FROM employees
+WHERE name LIKE '%r_';
+
+-------------------------------
+<JOIN문법에 관하여>
+JOIN : 컬럼을 합치는것
+-INNER JOIN : 두테이블 모두 존재할때만
+SELECT * from authors a
+INNER JOIN books b ON a.author_id = b.author_id;
+
+-NATURAL JOIN : INNER JOIN의 일종
+SELECT * from authors a	
+NATURAL JOIN books b
+ON a.author_id = b.author_id;
+
+-Left Outer JOIN
+SELECT * from authors a	
+LEFT JOIN books b 
+ON a.author_id = b.author_id;
+
+-Right Outer JOIN
+SELECT * from authors a	
+RIGHT JOIN books b 
+ON a.author_id = b.author_id;
+
+<UNION문법에 관하여>
+UNION : ROW를 합친다,
+select author_id from authors
+UNION ALL SELECT author_id from books;
+=select author_id가 같아야한다.
+
+-FULL Outher JOIN
+SELECT a.author_id,b.title
+FROM authors a
+LEFT JOIN books b
+ON a.author_id = b.author_id
+UNION
+SELECT a.author_id,b.title
+FROM authors a
+RIGHT JOIN books b
+ON a.author_id = b.author_id;
+
+UPDATE authors SET author_id =4
+WHERE last_name = 'king';
