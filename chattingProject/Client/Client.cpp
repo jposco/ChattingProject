@@ -887,7 +887,7 @@ public:
             else cout << "▶비밀번호가 다릅니다." << endl;
         }
     }
-    /*void beforeChat()
+    void beforeChat()
     {
         pstmt = con->prepareStatement("SELECT chatname, time, recv FROM chatting ORDER BY time DESC LIMIT 5");
         result = pstmt->executeQuery();
@@ -911,8 +911,7 @@ public:
             msg[i] += "---------------------------------------------------------------\n";
             cout << msg[i] << endl;
         }
-
-    }*/
+    }
 };
 
     int main()
