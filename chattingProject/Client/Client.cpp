@@ -356,7 +356,6 @@ public:
             exit(1);
         }
 
-        // 데이터베이스 선택
         con->setSchema("project1");
 
         // DB 한글 저장을 위한 셋팅
@@ -377,7 +376,8 @@ public:
             else if (ch == 8) { // Backspace 키인 경우
                 if (!pw.empty()) { // 입력된 문자가 있으면
                     pw.pop_back(); // 마지막 문자를 삭제
-                    cout << "\b \b"; // 커서 위치를 왼쪽으로 이동시켜 공백을 출력한 뒤, 다시 커서 위치를 원래대로 이동시킴
+                    cout << "\b \b"; // 커서 위치를 왼쪽으로 이동시켜 공백을 출력한 뒤,
+                                     // 다시 커서 위치를 원래대로 이동시킴
                 }
             }
             else {
@@ -443,7 +443,7 @@ public:
             string db_phone = result->getString(3);
             string db_birth = result->getString(4);
 
-            if (db_name == name && db_phone == phone && db_birth == DATE)
+            if (db_name == name && db_phone == phone && db_birth == birth)
             {
                 cout << "▶" << name << "님의 아이디는 " << db_id << "입니다." << endl;
                 Sleep(2000);
@@ -587,7 +587,6 @@ public:
         }
         while (1)
         {
-            string pw = "";
             cout << ">>비밀번호를 입력해주세요 : ";
             char ch = ' ';
             while (ch != 13) { // Enter 키를 누르면 입력 종료
@@ -658,7 +657,7 @@ public:
 
         pstmt = con->prepareStatement("INSERT INTO user(id,pw, name, phone, birth) VALUE(?,?, ?, ?, ?)");
         pstmt->setString(1, id);
-        pstmt->setString(2,          pw);
+        pstmt->setString(2, pw);
         pstmt->setString(3, name);
         pstmt->setString(4, phone);
         pstmt->setString(5, DATE);
@@ -778,7 +777,7 @@ public:
     void search_content_Message()
     {
         string content;
-        cout << ">>s내용에 따른 메시지 검색 : ";
+        cout << ">>내용에 따른 메시지 검색 : ";
         cin >> content;
         pstmt = con->prepareStatement("SELECT chatname, time, recv FROM chatting\
                                WHERE recv LIKE ?");
@@ -793,8 +792,8 @@ public:
                 string chatname = result->getString(1);
                 string time = result->getString(2);
                 string recv = result->getString(3);
-                cout << "------------------------------------------------------------" << endl;
-                cout << "▷보낸 사람 : " << chatname << "\t▷보낸 시간 : " << time << endl;
+                cout << "--------------------------------------------------" << endl;
+                cout << "▷보낸사람 : " << chatname << " ▷보낸시간 : " << time << endl;
                 cout << "▷" << recv << endl;
                 if (!result->next()) break;
             }
@@ -811,7 +810,6 @@ public:
         string startMonthDay = "2023" + startDay;
         string endMonthDay = "2023" + endDay;
 
-        // SQL 쿼리문을 수정하여 검색 범위를 설정합니다.
         pstmt = con->prepareStatement("SELECT chatname, time, recv FROM chatting \
                                    WHERE time BETWEEN ? AND ?");
         pstmt->setString(1, startMonthDay);
@@ -826,8 +824,8 @@ public:
                 string chatname = result->getString(1);
                 string time = result->getString(2);
                 string recv = result->getString(3);
-                cout << "------------------------------------------------------------" << endl;
-                cout << "▷보낸 사람 : " << chatname << "\t▷보낸 시간 : " << time << endl;
+                cout << "--------------------------------------------------" << endl;
+                cout << "▷보낸사람 : " << chatname << " ▷보낸시간 : " << time << endl;
                 cout << "▷" << recv << endl;
                 if (!result->next()) break;
             }
@@ -1238,3 +1236,24 @@ int main()
         delete stmt;
         return 0;
     }
+
+    //위 코드는 사용자가 비밀번호를 입력할 때, 입력된 비밀번호를 별표(*)로 대체하여 표시하는 코드입니다.
+
+    //    먼저, ch 변수에 13을 대입한 이유는, 13은 Enter 키를 나타내기 때문입니다. 
+    //    while 문은 Enter 키를 누르기 전까지 계속해서 사용자의 입력을 받습니다.
+    //        getch() 함수는 콘솔에서 사용자가 입력한 값을 읽어들입니다.
+    //        사용자가 Enter 키를 누르면, while 문이 종료됩니다.
+
+    //    비밀번호 입력 시, 입력된 문자열을 별표로 대체하기 위해, 
+    //        입력된 문자열을 pw 변수에 push_back() 함수로 저장합니다.
+    //        push_back() 함수는 문자열의 맨 뒤에 문자를 추가합니다.
+
+    //    그리고, cout << '' 를 통해, 입력된 문자열을 별표()로 대체하여 출력합니다.
+    //        이렇게 되면, 사용자가 입력한 비밀번호는 별표로 대체되어 보안성이 높아집니다.
+    //    backspace는 ASCII 코드에서 8번에 해당하는 값이며, 
+    //        _getch() 함수로 입력된 값을 확인하면 backspace일 때도 '*'로 출력되기 때문입니다.
+
+    //    해당 기능을 수정하려면, _getch() 함수로 입력받은 값이 backspace일 때는 '*' 대신
+    //        backspace 문자를 출력하도록 처리해야 합니다.
+    //        이를 위해서는 _getch() 함수의 반환 값이 8인 경우, 
+    //        즉 backspace를 입력받은 경우에 대한 분기 처리를 추가해야 합니다.
