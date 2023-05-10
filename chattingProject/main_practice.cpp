@@ -258,7 +258,7 @@ void recv_msg(int idx) {
                     string time = result->getString(2);
                     string recv = result->getString(3);
                     msg += "--------------------------------------------------";
-                    msg += "\n▷보낸 사람 : " + chatname + "  " + "▷보낸 시간 : " + time + "\n";
+                    msg += "\n▷보낸사람: " + chatname + "  " + "▷보낸시간: " + time + "\n";
                     msg += "▷내용 : " + recv + "\n";
                     msg += "--------------------------------------------------\n";
                     cout << msg << endl;
