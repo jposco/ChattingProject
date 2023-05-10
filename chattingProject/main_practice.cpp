@@ -228,7 +228,7 @@ void recv_msg(int idx) {
             return;
         }
     }
-}
+} 
 
 void del_client(int idx) {
     std::thread th(add_client);
