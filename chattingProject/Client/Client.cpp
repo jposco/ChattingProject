@@ -127,7 +127,7 @@ void searchPw()
     cout << " "; cout << "*          *     *       *   *****   *  *       *\n";
     cout << " "; cout << "*                                               *\n";
     cout << " "; cout << "*                                               *\n";
-    cout << " "; cout << "*               < 아이디 찾기 >                 *\n";
+    cout << " "; cout << "*               < 비밀번호 찾기 >               *\n";
     cout << " "; cout << "*                                               *\n";
     cout << " "; cout << "*                                               *\n";
     cout << " "; cout << "*               >> 아이디 입력                  *\n";
