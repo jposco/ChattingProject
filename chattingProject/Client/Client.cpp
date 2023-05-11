@@ -343,7 +343,7 @@ int chat_recv() {
 class SQL
 {
 private:
-    string id, pw, name, phone, status, birth, song = "";
+    string id, pw, name, phone, status, birth, song;
 public:
     SQL()
     {
@@ -443,19 +443,19 @@ public:
             string db_phone = result->getString(3);
             string db_birth = result->getString(4);
 
-            if (db_name == name && db_phone == phone && db_birth == birth)
+            if (db_name == name && db_phone == phone && db_birth == DATE)
             {
                 cout << "▶" << name << "님의 아이디는 " << db_id << "입니다." << endl;
-                Sleep(2000);
+                Sleep(3000);
             }
             else
             {
-                cout << "▶해당하는 정보가 없습니다." << endl;
+                cout << "▶해당하는 정보가 없습니다.!" << endl;
                 Sleep(500);
             }
         }
         else {
-            cout << "▶해당하는 정보가 없습니다." << endl;
+            cout << "▶해당하는 정보가 없습니다.?" << endl;
             Sleep(500);
         }
     }
@@ -663,6 +663,7 @@ public:
         pstmt->setString(5, DATE);
         pstmt->execute();
         cout << "▶회원가입이 완료되었습니다." << endl;
+        pw.clear();
         Sleep(500);
     }
     void myProfile()
