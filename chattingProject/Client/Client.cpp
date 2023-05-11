@@ -172,7 +172,7 @@ void createUser()
 }
 void mainMenu()
 {
-    Sleep(300);
+    Sleep(500);
     system("color 06");
     system("cls");
     cout << "\n";
@@ -1231,30 +1231,9 @@ int main()
 
         else cout << "▶잘못된 입력입니다. 다시 입력해주세요." << endl;
     }
-        delete result;
-        delete pstmt;
-        delete con;
-        delete stmt;
-        return 0;
-    }
-
-    //위 코드는 사용자가 비밀번호를 입력할 때, 입력된 비밀번호를 별표(*)로 대체하여 표시하는 코드입니다.
-
-    //    먼저, ch 변수에 13을 대입한 이유는, 13은 Enter 키를 나타내기 때문입니다. 
-    //    while 문은 Enter 키를 누르기 전까지 계속해서 사용자의 입력을 받습니다.
-    //        getch() 함수는 콘솔에서 사용자가 입력한 값을 읽어들입니다.
-    //        사용자가 Enter 키를 누르면, while 문이 종료됩니다.
-
-    //    비밀번호 입력 시, 입력된 문자열을 별표로 대체하기 위해, 
-    //        입력된 문자열을 pw 변수에 push_back() 함수로 저장합니다.
-    //        push_back() 함수는 문자열의 맨 뒤에 문자를 추가합니다.
-
-    //    그리고, cout << '' 를 통해, 입력된 문자열을 별표()로 대체하여 출력합니다.
-    //        이렇게 되면, 사용자가 입력한 비밀번호는 별표로 대체되어 보안성이 높아집니다.
-    //    backspace는 ASCII 코드에서 8번에 해당하는 값이며, 
-    //        _getch() 함수로 입력된 값을 확인하면 backspace일 때도 '*'로 출력되기 때문입니다.
-
-    //    해당 기능을 수정하려면, _getch() 함수로 입력받은 값이 backspace일 때는 '*' 대신
-    //        backspace 문자를 출력하도록 처리해야 합니다.
-    //        이를 위해서는 _getch() 함수의 반환 값이 8인 경우, 
-    //        즉 backspace를 입력받은 경우에 대한 분기 처리를 추가해야 합니다.
+    delete result;
+    delete pstmt;
+    delete con;
+    delete stmt;
+    return 0;
+}
