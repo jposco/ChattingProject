@@ -148,7 +148,7 @@ void startSql()
     stmt->execute("set names euckr");
     if (stmt) { delete stmt; stmt = nullptr; }
 }
-void server_init() //서버측 소켓 활성화
+void server_init() //서버측 소켓 활성화 , //서버용 소켓을 만드는 함수
 {
     server_sock.sck = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
 
