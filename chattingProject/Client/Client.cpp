@@ -9,12 +9,26 @@
 #include <mysql/jdbc.h>
 #include <conio.h> 
 #include <Windows.h>
+//암호화를 위한 CryptoPP 라이브러리 사용
+#include <sha.h>
+#include <hex.h>
+
+std::string HashPassword(const std::string& password)
+{
+    std::string hashedPassword;
+
+    CryptoPP::SHA256 hash;
+
+    CryptoPP::StringSource(password, true, new CryptoPP::HashFilter(hash, new CryptoPP::HexEncoder(new CryptoPP::StringSink(hashedPassword))));
+
+    return hashedPassword;
+}
+
 
 using std::cout;
 using std::cin; 
 using std::endl;
 using std::string;
-
 #define MAX_SIZE 1024
 
 const string server = "tcp://127.0.0.1:3306";
@@ -386,6 +400,10 @@ public:
             }
         }
         cout << endl;
+
+        // 로그인 기능에서 사용하는 해시된 비밀번호
+        string loginHashedPassword = HashPassword(pw);
+  
         pstmt = con->prepareStatement("SELECT id, pw, name FROM user \
             WHERE id=?");
         pstmt->setString(1, id);
@@ -396,7 +414,7 @@ public:
             string db_id = result->getString(1); // 데이터베이스에서 가져온 ID
             string db_pw = result->getString(2); // 데이터베이스에서 가져온 PW
 
-            if (db_id == id && db_pw == pw)
+            if (db_id == id && db_pw == loginHashedPassword)
             {
                 name = result->getString(3);
                 this->name = name;
@@ -538,8 +556,11 @@ public:
 
                     if (new_pw == renew_pw)
                     {
+                        //비밀번호 찾기 기능에서 사용하는 해시된 비밀번호
+                        string forgotPasswordHashedPassword = HashPassword(new_pw);
+
                         pstmt = con->prepareStatement("UPDATE user SET pw = ? WHERE id = ?");
-                        pstmt->setString(1, new_pw);
+                        pstmt->setString(1, forgotPasswordHashedPassword);
                         pstmt->setString(2, id);
                         pstmt->executeQuery();
                         printf("▶새로운 비밀번호로 변경되었습니다.\n");
@@ -635,6 +656,9 @@ public:
             }
         }
 
+        //회원가입 기능에서 사용하는 해시된 비밀번호
+        string signUpHashedPassword = HashPassword(pw);
+
         cout << ">>이름 : ";
         cin >> name;
         cout << ">>전화번호 : ";
@@ -657,7 +681,7 @@ public:
 
         pstmt = con->prepareStatement("INSERT INTO user(id,pw, name, phone, birth) VALUE(?,?, ?, ?, ?)");
         pstmt->setString(1, id);
-        pstmt->setString(2, pw);
+        pstmt->setString(2, signUpHashedPassword);
         pstmt->setString(3, name);
         pstmt->setString(4, phone);
         pstmt->setString(5, DATE);
@@ -900,10 +924,13 @@ public:
                 }
                 cout << endl;
 
+                // 새로운 비밀번호를 해시화한 값
+                string newPasswordHashed = HashPassword(new_pw);
+
                 if (new_pw == renew_pw)
                 {
                     pstmt = con->prepareStatement("UPDATE user SET pw = ? WHERE id = ?");
-                    pstmt->setString(1, new_pw);
+                    pstmt->setString(1, newPasswordHashed);
                     pstmt->setString(2, id);
                     pstmt->executeQuery();
                     printf("▶새로운 비밀번호로 변경되었습니다.\n");
@@ -937,6 +964,8 @@ public:
         }
         cout << endl;
 
+        string DeletePasswordHashed = HashPassword(existPw);
+
         pstmt = con->prepareStatement("SELECT pw FROM user \
             WHERE id=?");
         pstmt->setString(1, id);
@@ -945,7 +974,7 @@ public:
         if (result->next())
         { // 쿼리 결과가 있다면
             string db_pw = result->getString(1); // 데이터베이스에서 가져온 PW
-            if (db_pw == existPw)
+            if (db_pw == DeletePasswordHashed)
             {
                 cout << "정말 삭제하시겠습니까? 삭제한 이후엔 되돌릴 수 없습니다. 1. 계속하기, 2. 그만두기 : ";
                 char lastCheck;
