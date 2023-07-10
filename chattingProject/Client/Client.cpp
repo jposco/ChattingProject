@@ -9,13 +9,18 @@
 #include <mysql/jdbc.h>
 #include <conio.h> 
 #include <Windows.h>
+using std::cout;
+using std::cin;
+using std::endl;
+using std::string;
+
 //암호화를 위한 CryptoPP 라이브러리 사용
 #include <sha.h>
 #include <hex.h>
 
-std::string HashPassword(const std::string& password)
+string HashPassword(const string& password)
 {
-    std::string hashedPassword;
+    string hashedPassword;
 
     CryptoPP::SHA256 hash;
 
@@ -25,10 +30,7 @@ std::string HashPassword(const std::string& password)
 }
 
 
-using std::cout;
-using std::cin; 
-using std::endl;
-using std::string;
+
 #define MAX_SIZE 1024
 
 const string server = "tcp://127.0.0.1:3306";
